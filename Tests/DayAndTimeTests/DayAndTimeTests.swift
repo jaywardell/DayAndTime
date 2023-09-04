@@ -234,6 +234,7 @@ final class DayAndTimeTests: XCTestCase {
         XCTAssertFalse(sut.canStepForwardOneHour())
     }
 
+    // TODO: this fails occasionally
     func test_canStepForwardOneHour_returns_true_if_not_at_end_of_day() {
         let sut = DayAndTime()
 

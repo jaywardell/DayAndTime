@@ -33,6 +33,13 @@ final class DayAndTimeTests: XCTestCase {
         XCTAssertEqual(sut.day.upperBound.timeIntervalSince1970 - sut.day.lowerBound.timeIntervalSince1970, 86400)
     }
 
+    func test_date_and_time_are_same_on_init() {
+        let sut = DayAndTime()
+
+        // date should just be a synonym for time
+        XCTAssertEqual(sut.date, sut.time)
+    }
+
     func test_term_is_all_time_on_init() {
         let sut = DayAndTime()
 
@@ -75,6 +82,16 @@ final class DayAndTimeTests: XCTestCase {
         sut.setTime(to: startOfDay)
 
         XCTAssertEqual(startOfDay, sut.time)
+    }
+
+    func test_setTime_sets_date_to_date_passed_in() {
+        let sut = DayAndTime()
+
+        let startOfDay = Date.now.advanceBySmallRandomNumberOfDays()
+        sut.setTime(to: startOfDay)
+
+        // date and time are just synonyms
+        XCTAssertEqual(startOfDay, sut.date)
     }
 
     func test_setTime_sets_time_to_now_if_no_date_passed_in() {

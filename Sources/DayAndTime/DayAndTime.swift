@@ -15,7 +15,7 @@ extension ClosedRange where Bound == Date {
 
 /// A type that encapsulates a Date instance and offers methods to adjust the Date in various ways
 public final class DayAndTime: ObservableObject {
-    @Published private(set) var time = Date.now
+    @Published private(set) public var time = Date.now
 
     let calendar: Calendar
 

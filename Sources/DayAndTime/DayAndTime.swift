@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 extension ClosedRange where Bound == Date {
     static var allTime: Self {
@@ -57,6 +58,14 @@ public final class DayAndTime: ObservableObject {
 
     public func setTime(to newDate: Date = .now) {
         self.time = min(max(newDate, term.lowerBound), term.upperBound)
+    }
+
+    public var timeBinding: Binding<Date> {
+        Binding<Date>(get: { [unowned self] in
+            time
+        }, set: { [unowned self] in
+            time = $0
+        })
     }
 
     private var oneHourForward: Date? {

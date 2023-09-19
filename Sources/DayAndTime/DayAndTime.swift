@@ -60,7 +60,7 @@ public final class DayAndTime: ObservableObject {
         abs(Date.now.timeIntervalSince1970 - time.timeIntervalSince1970) < nowMargin
     }
 
-    public func setTime(to newDate: Date = .now) {
+    public func setDayAndTime(to newDate: Date = .now) {
         self.time = min(max(newDate, term.lowerBound), term.upperBound)
     }
 

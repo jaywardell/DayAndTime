@@ -84,41 +84,41 @@ final class DayAndTimeTests: XCTestCase {
         let randomDateInFuture = date.addingTimeInterval(.random(in: 1 ... 10_000_000))
         let expected2 = sut.calendar.startOfDay(for: randomDateInFuture)
 
-        sut.setTime(to: randomDateInFuture)
+        sut.setDayAndTime(to: randomDateInFuture)
         XCTAssertEqual(sut.startOfDay, expected2)
     }
 
-    // MARK: - setTime
-    func test_setTime_sets_time_to_date_passed_in() {
+    // MARK: - setDayAndTime
+    func test_setDayAndTime_sets_time_to_date_passed_in() {
         let sut = DayAndTime()
 
         let startOfDay = Date.now.advanceBySmallRandomNumberOfDays()
-        sut.setTime(to: startOfDay)
+        sut.setDayAndTime(to: startOfDay)
 
         XCTAssertEqual(startOfDay, sut.time)
     }
 
-    func test_setTime_sets_date_to_date_passed_in() {
+    func test_setDayAndTime_sets_date_to_date_passed_in() {
         let sut = DayAndTime()
 
         let startOfDay = Date.now.advanceBySmallRandomNumberOfDays()
-        sut.setTime(to: startOfDay)
+        sut.setDayAndTime(to: startOfDay)
 
         // date and time are just synonyms
         XCTAssertEqual(startOfDay, sut.date)
     }
 
-    func test_setTime_sets_time_to_now_if_no_date_passed_in() {
+    func test_setDayAndTime_sets_time_to_now_if_no_date_passed_in() {
         let sut = DayAndTime()
         let startOfDay = Date.now.advanceBySmallRandomNumberOfDays()
-        sut.setTime(to: startOfDay)
+        sut.setDayAndTime(to: startOfDay)
 
-        sut.setTime()
+        sut.setDayAndTime()
 
         XCTAssertEqual(sut.time.timeIntervalSince1970, Date.now.timeIntervalSince1970, accuracy: 0.001)
     }
 
-    func test_setTime_sets_day_to_day_of_date_passed_in() {
+    func test_setDayAndTime_sets_day_to_day_of_date_passed_in() {
         let sut = DayAndTime()
 
         let newDate = sut.time.advanceBySmallRandomNumberOfDays()
@@ -126,39 +126,39 @@ final class DayAndTimeTests: XCTestCase {
         let oneDay = DateComponents(day: 1)
         let endOfDay = Calendar.current.date(byAdding: oneDay, to: startOfDay)
 
-        sut.setTime(to: newDate)
+        sut.setDayAndTime(to: newDate)
 
         XCTAssertEqual(sut.day.lowerBound, startOfDay)
         XCTAssertEqual(sut.day.upperBound, endOfDay)
     }
 
-    func test_setTime_sets_time_to_end_of_term_if_time_passed_in_is_after_term() {
+    func test_setDayAndTime_sets_time_to_end_of_term_if_time_passed_in_is_after_term() {
         let sut = DayAndTime()
 
         let endOfTerm = Date(timeIntervalSince1970: 86400)
         sut.term = Date(timeIntervalSince1970: 0) ... endOfTerm
 
-        sut.setTime()
+        sut.setDayAndTime()
 
         XCTAssertEqual(sut.time, endOfTerm)
     }
 
-    func test_setTime_sets_time_to_beginning_of_term_if_time_passed_in_is_before_term() {
+    func test_setDayAndTime_sets_time_to_beginning_of_term_if_time_passed_in_is_before_term() {
         let sut = DayAndTime()
 
         let startOfTerm = Date.now.addingTimeInterval(3600)
         sut.term = startOfTerm ... .distantFuture
 
-        sut.setTime()
+        sut.setDayAndTime()
 
         XCTAssertEqual(sut.time, startOfTerm)
     }
 
-    func test_setTime_triggers_objectWillChage() {
+    func test_setDayAndTime_triggers_objectWillChage() {
         let sut = DayAndTime()
 
         expectChanges(for: sut.objectWillChange.eraseToAnyPublisher()) {
-            sut.setTime()
+            sut.setDayAndTime()
         }
     }
 
@@ -167,7 +167,7 @@ final class DayAndTimeTests: XCTestCase {
     func test_stepForwardOneHour_does_nothing_if_time_is_end_of_day() {
         let sut = DayAndTime()
 
-        sut.setTime(to: sut.day.upperBound.addingTimeInterval(.random(in: -3599 ... -1)))
+        sut.setDayAndTime(to: sut.day.upperBound.addingTimeInterval(.random(in: -3599 ... -1)))
         let expected = sut.time
 
         XCTAssertEqual(sut.time, expected)
@@ -177,7 +177,7 @@ final class DayAndTimeTests: XCTestCase {
     func test_stepForwardOneHour_does_nothing_if_time_is_less_than_one_hour_before_end_of_day() throws {
         let sut = DayAndTime()
         let newtime = Calendar.current.date(byAdding: DateComponents(minute: .random(in: -59 ... -1)), to: sut.day.upperBound)!
-        sut.setTime(to: newtime)
+        sut.setDayAndTime(to: newtime)
         let expected = sut.time
 
         XCTAssertEqual(sut.time, expected)
@@ -200,7 +200,7 @@ final class DayAndTimeTests: XCTestCase {
         let sut = DayAndTime()
         let newtime = Calendar.current.date(byAdding: DateComponents(hour: .random(in: 1 ... 23)), to: sut.day.lowerBound)!
         let expected = Calendar.current.date(byAdding: DateComponents(hour: 1), to: newtime)
-        sut.setTime(to: newtime) // TODO: set to midday
+        sut.setDayAndTime(to: newtime) // TODO: set to midday
 
 
         sut.stepForwardOneHour()
@@ -214,7 +214,7 @@ final class DayAndTimeTests: XCTestCase {
         let hours = Int.random(in: 0 ... 22)
         let newtime = Calendar.current.date(byAdding: DateComponents(hour: hours, minute: .random(in: 1 ... 59), second: .random(in: 0 ... 59)), to: sut.day.lowerBound)!
         let expected = Calendar.current.date(byAdding: DateComponents(hour: hours + 1), to: sut.day.lowerBound)
-        sut.setTime(to: newtime) // TODO: set to midday
+        sut.setDayAndTime(to: newtime) // TODO: set to midday
 
         sut.stepForwardOneHour()
 
@@ -234,7 +234,7 @@ final class DayAndTimeTests: XCTestCase {
     func test_canStepForwardOneHour_returns_false_if_time_is_end_of_day() {
         let sut = DayAndTime()
 
-        sut.setTime(to: sut.day.upperBound.addingTimeInterval(.random(in: -3599 ... -1)))
+        sut.setDayAndTime(to: sut.day.upperBound.addingTimeInterval(.random(in: -3599 ... -1)))
 
         XCTAssertFalse(sut.canStepForwardOneHour())
     }
@@ -243,7 +243,7 @@ final class DayAndTimeTests: XCTestCase {
     func test_canStepForwardOneHour_returns_false_if_time_is_less_than_one_hour_before_end_of_day() throws {
         let sut = DayAndTime()
         let newtime = Calendar.current.date(byAdding: DateComponents(minute: .random(in: -59 ... -1)), to: sut.day.upperBound)!
-        sut.setTime(to: newtime)
+        sut.setDayAndTime(to: newtime)
 
         XCTAssertFalse(sut.canStepForwardOneHour())
     }
@@ -254,7 +254,7 @@ final class DayAndTimeTests: XCTestCase {
 
         let newtime = Calendar.current.date(byAdding: DateComponents(hour: .random(in: 0 ... 23), minute: .random(in: 0 ... 60)), to: sut.day.lowerBound)!
 
-        sut.setTime(to: newtime)
+        sut.setDayAndTime(to: newtime)
 
         XCTAssert(sut.canStepForwardOneHour())
     }
@@ -273,7 +273,7 @@ final class DayAndTimeTests: XCTestCase {
     func test_stepBackOneHour_does_nothing_if_time_is_beginning_of_day() {
         let sut = DayAndTime()
 
-        sut.setTime(to: sut.day.lowerBound)
+        sut.setDayAndTime(to: sut.day.lowerBound)
         let expected = sut.time
 
         sut.stepBackOneHour()
@@ -298,7 +298,7 @@ final class DayAndTimeTests: XCTestCase {
         let sut = DayAndTime()
         let newtime = Calendar.current.date(byAdding: DateComponents(hour: .random(in: 1 ... 23)), to: sut.day.lowerBound)!
         let expected = Calendar.current.date(byAdding: DateComponents(hour: -1), to: newtime)
-        sut.setTime(to: newtime)
+        sut.setDayAndTime(to: newtime)
 
 
         sut.stepBackOneHour()
@@ -312,7 +312,7 @@ final class DayAndTimeTests: XCTestCase {
         let hours = Int.random(in: 0 ... 22)
         let newtime = Calendar.current.date(byAdding: DateComponents(hour: hours, minute: .random(in: 1 ... 59), second: .random(in: 0 ... 59)), to: sut.day.lowerBound)!
         let expected = Calendar.current.date(byAdding: DateComponents(hour: hours), to: sut.day.lowerBound)
-        sut.setTime(to: newtime)
+        sut.setDayAndTime(to: newtime)
 
         sut.stepBackOneHour()
 
@@ -332,7 +332,7 @@ final class DayAndTimeTests: XCTestCase {
     func test_canStepBackOneHour_returns_false_if_time_is_beginning_of_day() {
         let sut = DayAndTime()
 
-        sut.setTime(to: sut.day.lowerBound)
+        sut.setDayAndTime(to: sut.day.lowerBound)
 
         XCTAssertFalse(sut.canStepBackOneHour())
     }
@@ -351,7 +351,7 @@ final class DayAndTimeTests: XCTestCase {
 
         let newtime = Calendar.current.date(byAdding: DateComponents(hour: .random(in: 0 ... 23), minute: .random(in: 1 ... 60)), to: sut.day.lowerBound)!
 
-        sut.setTime(to: newtime)
+        sut.setDayAndTime(to: newtime)
 
         XCTAssert(sut.canStepBackOneHour())
     }
@@ -476,7 +476,7 @@ final class DayAndTimeTests: XCTestCase {
         let sut = DayAndTime()
 
         let oneDayBefore = Calendar.current.date(byAdding: DateComponents(day: 1), to: sut.time)!
-        sut.setTime(to: oneDayBefore)
+        sut.setDayAndTime(to: oneDayBefore)
 
         XCTAssertFalse(sut.isToday)
     }
@@ -485,7 +485,7 @@ final class DayAndTimeTests: XCTestCase {
         let sut = DayAndTime()
 
         let oneDayBefore = Calendar.current.date(byAdding: DateComponents(minute: 1), to: sut.time)!
-        sut.setTime(to: oneDayBefore)
+        sut.setDayAndTime(to: oneDayBefore)
 
         XCTAssert(sut.isToday)
     }
@@ -496,7 +496,7 @@ final class DayAndTimeTests: XCTestCase {
         let sut = DayAndTime()
 
         let oneDayBefore = Calendar.current.date(byAdding: DateComponents(minute: 1), to: sut.time)!
-        sut.setTime(to: oneDayBefore)
+        sut.setDayAndTime(to: oneDayBefore)
 
         XCTAssertFalse(sut.isNow)
     }
@@ -505,7 +505,7 @@ final class DayAndTimeTests: XCTestCase {
         let sut = DayAndTime()
 
         let oneDayBefore = Calendar.current.date(byAdding: DateComponents(second: 1), to: sut.time)!
-        sut.setTime(to: oneDayBefore)
+        sut.setDayAndTime(to: oneDayBefore)
 
         XCTAssert(sut.isNow)
     }

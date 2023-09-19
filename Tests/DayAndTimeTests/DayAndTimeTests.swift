@@ -223,13 +223,13 @@ final class DayAndTimeTests: XCTestCase {
         XCTAssertEqual(sut.time, startOfTerm)
     }
 
-//    func test_setDay_triggers_objectWillChage() {
-//        let sut = DayAndTime()
-//
-//        expectChanges(for: sut.objectWillChange.eraseToAnyPublisher()) {
-//            sut.setDay()
-//        }
-//    }
+    func test_setDay_triggers_objectWillChage() {
+        let sut = DayAndTime()
+
+        expectChanges(for: sut.objectWillChange.eraseToAnyPublisher()) {
+            sut.setDay()
+        }
+    }
 
     // MARK: - stepForwardOneHour()
 

@@ -162,6 +162,81 @@ final class DayAndTimeTests: XCTestCase {
         }
     }
 
+    // MARK: - setDay
+    func test_setDay_sets_day_to_date_passed_in() {
+        let sut = DayAndTime()
+
+        let newTime = Date.now.advanceBySmallRandomNumberOfDays()
+        sut.setDay(to: newTime)
+
+        let expected = Calendar.current.startOfDay(for: newTime)
+        XCTAssertEqual(expected, sut.startOfDay)
+    }
+
+//    func test_setDay_sets_date_to_date_passed_in() {
+//        let sut = DayAndTime()
+//
+//        let startOfDay = Date.now.advanceBySmallRandomNumberOfDays()
+//        sut.setDay(to: startOfDay)
+//
+//        // date and time are just synonyms
+//        XCTAssertEqual(startOfDay, sut.date)
+//    }
+//
+//    func test_setDay_sets_time_to_now_if_no_date_passed_in() {
+//        let sut = DayAndTime()
+//        let startOfDay = Date.now.advanceBySmallRandomNumberOfDays()
+//        sut.setDay(to: startOfDay)
+//
+//        sut.setDay()
+//
+//        XCTAssertEqual(sut.time.timeIntervalSince1970, Date.now.timeIntervalSince1970, accuracy: 0.001)
+//    }
+//
+//    func test_setDay_sets_day_to_day_of_date_passed_in() {
+//        let sut = DayAndTime()
+//
+//        let newDate = sut.time.advanceBySmallRandomNumberOfDays()
+//        let startOfDay = Calendar.current.startOfDay(for: newDate)
+//        let oneDay = DateComponents(day: 1)
+//        let endOfDay = Calendar.current.date(byAdding: oneDay, to: startOfDay)
+//
+//        sut.setDay(to: newDate)
+//
+//        XCTAssertEqual(sut.day.lowerBound, startOfDay)
+//        XCTAssertEqual(sut.day.upperBound, endOfDay)
+//    }
+//
+//    func test_setDay_sets_time_to_end_of_term_if_time_passed_in_is_after_term() {
+//        let sut = DayAndTime()
+//
+//        let endOfTerm = Date(timeIntervalSince1970: 86400)
+//        sut.term = Date(timeIntervalSince1970: 0) ... endOfTerm
+//
+//        sut.setDay()
+//
+//        XCTAssertEqual(sut.time, endOfTerm)
+//    }
+//
+//    func test_setDay_sets_time_to_beginning_of_term_if_time_passed_in_is_before_term() {
+//        let sut = DayAndTime()
+//
+//        let startOfTerm = Date.now.addingTimeInterval(3600)
+//        sut.term = startOfTerm ... .distantFuture
+//
+//        sut.setDay()
+//
+//        XCTAssertEqual(sut.time, startOfTerm)
+//    }
+//
+//    func test_setDay_triggers_objectWillChage() {
+//        let sut = DayAndTime()
+//
+//        expectChanges(for: sut.objectWillChange.eraseToAnyPublisher()) {
+//            sut.setDay()
+//        }
+//    }
+
     // MARK: - stepForwardOneHour()
 
     func test_stepForwardOneHour_does_nothing_if_time_is_end_of_day() {

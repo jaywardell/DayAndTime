@@ -64,6 +64,10 @@ public final class DayAndTime: ObservableObject {
         self.time = min(max(newDate, term.lowerBound), term.upperBound)
     }
 
+    public func setDay(to newDate: Date = .now) {
+        self.time = min(max(newDate, term.lowerBound), term.upperBound)
+    }
+
     public var timeBinding: Binding<Date> {
         Binding<Date>(get: { [unowned self] in
             time

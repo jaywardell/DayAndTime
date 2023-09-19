@@ -65,7 +65,10 @@ public final class DayAndTime: ObservableObject {
     }
 
     public func setDay(to newDate: Date = .now) {
-        self.time = min(max(newDate, term.lowerBound), term.upperBound)
+        let timeOfDay = time.timeIntervalSince(startOfDay)
+
+        let newDayAndTime = calendar.startOfDay(for: newDate).addingTimeInterval(timeOfDay)
+        setDayAndTime(to: newDayAndTime)
     }
 
     public var timeBinding: Binding<Date> {

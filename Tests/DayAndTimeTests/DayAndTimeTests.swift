@@ -173,16 +173,19 @@ final class DayAndTimeTests: XCTestCase {
         XCTAssertEqual(expected, sut.startOfDay)
     }
 
-//    func test_setDay_sets_date_to_date_passed_in() {
-//        let sut = DayAndTime()
-//
-//        let startOfDay = Date.now.advanceBySmallRandomNumberOfDays()
-//        sut.setDay(to: startOfDay)
-//
-//        // date and time are just synonyms
-//        XCTAssertEqual(startOfDay, sut.date)
-//    }
-//
+    func test_setDay_preserves_time_after_startOfDay() {
+        let sut = DayAndTime()
+
+        let startingTimeOfDay = sut.time.timeIntervalSince(sut.startOfDay)
+
+        let newTime = Date.now.advanceBySmallRandomNumberOfDays()
+        sut.setDay(to: newTime)
+        let newTimeOfDay = newTime.timeIntervalSince(sut.calendar.startOfDay(for: newTime))
+
+        // date and time are just synonyms
+        XCTAssertEqual(startingTimeOfDay, newTimeOfDay, accuracy: 1)
+    }
+
 //    func test_setDay_sets_time_to_now_if_no_date_passed_in() {
 //        let sut = DayAndTime()
 //        let startOfDay = Date.now.advanceBySmallRandomNumberOfDays()

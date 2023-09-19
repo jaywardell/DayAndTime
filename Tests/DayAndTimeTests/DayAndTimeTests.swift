@@ -183,19 +183,24 @@ final class DayAndTimeTests: XCTestCase {
         let newTimeOfDay = newTime.timeIntervalSince(sut.calendar.startOfDay(for: newTime))
 
         // date and time are just synonyms
-        XCTAssertEqual(startingTimeOfDay, newTimeOfDay, accuracy: 1)
+        XCTAssertEqual(startingTimeOfDay, newTimeOfDay, accuracy: 0.001)
     }
 
-//    func test_setDay_sets_time_to_now_if_no_date_passed_in() {
-//        let sut = DayAndTime()
-//        let startOfDay = Date.now.advanceBySmallRandomNumberOfDays()
-//        sut.setDay(to: startOfDay)
-//
-//        sut.setDay()
-//
-//        XCTAssertEqual(sut.time.timeIntervalSince1970, Date.now.timeIntervalSince1970, accuracy: 0.001)
-//    }
-//
+    func test_setDay_sets_time_to_now_if_no_date_passed_in() {
+        let sut = DayAndTime()
+        let oneSecondAhead = sut.time.addingTimeInterval(1)
+        // move the time up 1 second
+        sut.setDayAndTime(to: oneSecondAhead)
+        // now move it up several days
+        sut.setDay(to: sut.time.advanceBySmallRandomNumberOfDays())
+
+        // now set the day to today again
+        sut.setDay()
+
+        // now the sut's time should be one second ahead of where it was when it was first created
+        XCTAssertEqual(sut.time.timeIntervalSince1970, oneSecondAhead.timeIntervalSince1970, accuracy: 0.001)
+    }
+
 //    func test_setDay_sets_day_to_day_of_date_passed_in() {
 //        let sut = DayAndTime()
 //

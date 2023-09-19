@@ -74,6 +74,20 @@ final class DayAndTimeTests: XCTestCase {
         }
     }
 
+    func test_startOfDay_returns_start_of_day() {
+        let date = Date.now
+        let sut = DayAndTime(time: date)
+
+        let expected = sut.calendar.startOfDay(for: date)
+        XCTAssertEqual(sut.startOfDay, expected)
+
+        let randomDateInFuture = date.addingTimeInterval(.random(in: 1 ... 10_000_000))
+        let expected2 = sut.calendar.startOfDay(for: randomDateInFuture)
+
+        sut.setTime(to: randomDateInFuture)
+        XCTAssertEqual(sut.startOfDay, expected2)
+    }
+
     // MARK: - setTime
     func test_setTime_sets_time_to_date_passed_in() {
         let sut = DayAndTime()

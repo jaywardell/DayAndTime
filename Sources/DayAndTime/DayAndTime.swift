@@ -38,6 +38,10 @@ public final class DayAndTime: ObservableObject {
         calendar.day(for: time)
     }
 
+    public var startOfDay: Date {
+        day.lowerBound
+    }
+
     public func matchesDay(of time: Date) -> Bool {
         day == calendar.day(for: time)
     }
